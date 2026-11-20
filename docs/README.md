@@ -18,11 +18,13 @@ Welcome to the documentation suite for **Project Stash House**. This project est
 ## 2. Core Concepts: The V2 Pivot
 
 Traditional credential management solutions (HashiCorp Vault, 1Password, cloud IAM) are designed for human interactive shells or static microservices. When autonomous LLM agents execute commands on a host, traditional models collapse:
+
 - Agents echo terminal outputs and error traces directly into conversational contexts.
 - Sensitive credentials persist across session logs (`~/.openclaw/memory/daily/`) and vector memory stores.
 - Indirect prompt injection can hijack active agent permissions to exfiltrate keys.
 
 Stash House V2 introduces **`stash-exec`**, enforcing the **Zero-Agent-Read Principle**:
+
 1. **The Enclave (Layer 1):** Encrypted storage at rest using standard POSIX `pass` / GPG. The agent never has direct decryption authority.
 2. **The Execution Envelope (Layer 2):** In-memory ephemeral injection via `execve`. Master keys exchange for short-lived downscoped tokens (TTL $\le$ 15m). No CLI flag leakage.
 3. **The Scrubbing Membrane (Layer 3):** Real-time `stdout`/`stderr` stream filtering combining regex heuristics and Shannon entropy thresholds to replace secrets with `[REDACTED_SECRET]` before output reaches the LLM context.
@@ -33,6 +35,7 @@ Stash House V2 introduces **`stash-exec`**, enforcing the **Zero-Agent-Read Prin
 ## 3. Grant & Research Alignment
 
 Stash House V2 serves as the concrete software implementation for two primary research thrusts:
+
 - **Google AI for Privacy, Safety & Security (PSS) Award ($100K):** Focuses on empirical modeling of agent credential exposure vectors, entropy-based output redaction, and open-source containment tooling.
 - **NSF Secure and Trustworthy Cyberspace (SaTC):** Serves as the experimental software artifact demonstrating runtime identity federation and the Materialization Boundary.
 
@@ -41,6 +44,7 @@ Stash House V2 serves as the concrete software implementation for two primary re
 ## 4. Historical Archive (`v1-legacy`)
 
 The [archive/v1-legacy](file:///home/franklin/Documents/research/stash-house/docs/archive/v1-legacy) directory preserves foundational assets from the 2025 project inception:
+
 - `abstract.md` & `stash.md`: Initial local credential hygiene guides for human developers.
 - `keyringer.md`: Keyringer repository reference.
 - `stash.drawio`: Original visual architecture diagram.
