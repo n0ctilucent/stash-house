@@ -1,63 +1,53 @@
-# Stash
+# Project Stash House Documentation
 
-## Consolidation & De-duplication
+> **Stash House V2:** Runtime Credential Containment and Identity Federation across the Materialization Boundary.
 
-```sh
-* [ ] Merge pass Guides: Consolidate docs/password-store-readme.txt, docs/stash.md, and the usage section of docs/README.md into a single
-    docs/guides/local-stewardship.md.
-* [ ] Clean up Root README: Update docs/README.md to serve as a high-level table of contents for the documentation folder, rather than containing
-    fragmented code snippets.
-* [ ] Formalize Scratchpads: Move raw URLs and command snippets from docs/nostr.txt and docs/latex.txt into structured documentation (e.g.,
-    docs/architecture/nostr.md and docs/guides/building-from-source.md).
-```
+Welcome to the documentation suite for **Project Stash House**. The project is organized into two distinct research and engineering tracks tailored for specific grant vehicles and deployment scales.
 
-## Architectural Clarity
+---
 
-```sh
-* [ ] Create a Developer Guide: Add a docs/DEVELOPMENT.md explaining the Go project structure (cmd/, internal/), how to add new "ProtectLocal"
-    operators, and how to run the test suite.
-* [ ] Document the Materialization Boundary: The LaTeX paper identifies this as a "critical transition point." Create a dedicated markdown file
-    (docs/architecture/materialization.md) that explains this concept for engineers, including the JIT injection patterns mentioned.
-* [ ] Update Diagrams: The docs/stash.drawio file should be exported to a high-resolution PNG/SVG and embedded in the markdown docs for easier
-    viewing without a specific editor.
-```
+## 1. Documentation Map
 
-## Workflow & Tooling
+| Document | Target Program | Focus Area | Status |
+| :--- | :--- | :--- | :--- |
+| **[HLD-TRACK1-GOOGLE-AI-PSS.md](file:///home/franklin/Documents/research/stash-house/docs/HLD-TRACK1-GOOGLE-AI-PSS.md)** | **Google AI for Privacy, Safety & Security (PSS) Award** ($100K) | **Agentic Runtime Credential Containment & Perception Membrane (`stash-exec`):** In-memory secret injection, PTY stream interception, and real-time Shannon entropy output scrubbing for autonomous LLM agents. | **Ready for Review** |
+| **[HLD-TRACK2-NSF-SATC-FEDERATION.md](file:///home/franklin/Documents/research/stash-house/docs/HLD-TRACK2-NSF-SATC-FEDERATION.md)** | **NSF Secure and Trustworthy Cyberspace (SaTC)** / **GCP Credits** ($5,000.00) | **Enterprise Identity Federation & Cloud-Native Boundary:** Bridging campus Kerberos/LDAP roots to GKE Autopilot, Cloud HA VPN, Secret Manager, and CURC Alpine HPC with non-repudiable audit trails. | **Ready for Review** |
+| **[archive/v1-legacy/](file:///home/franklin/Documents/research/stash-house/docs/archive/v1-legacy)** | Historical Archives (2025–2026) | Original human-developer `pass` tutorials, early LaTeX paper drafts, and raw exploratory notes. | **Archived** |
 
-```sh
-* [ ] Integrate Demo Docs: Link the demo/ scripts clearly within the documentation. Create a docs/guides/walkthrough.md that guides a user through
-    demo_setup.sh and the 01-03 sequence.
-* [ ] Infrastructure Docs: Add documentation for the terraform/ layer. While the paper mentions GKE/FOKS, there is no "Operator's Guide" on how to
-    actually deploy the federated backend.
-* [ ] Keyringer Integration: The slides mention incorporating keyringer. Decide if this is a core part of the framework and document the integration
-    path or remove the placeholder if it's no longer planned.
-```
+---
 
-## Maintenance & Standards
+## 2. Track Comparison & Decision Matrix
 
-```sh
-* [ ] Standardize Naming: Ensure the project is consistently referred to as "Stash House" (the framework) rather than just "Stash" (which is often
-    confused with the tool pass or generic stashing).
-* [ ] Automate LaTeX Builds: Ensure the Makefile.am in docs/paper and docs/slides is integrated into the root Makefile so make docs builds all PDFs.
-* [ ] Verify Bibliography: Update docs/paper/bib.bib to ensure all URLs are current, particularly the FOKS whitepaper link.
-```
+To evaluate which track to pursue first, review the structural comparisons below:
 
-## Suggested Directory Structure Refactor
+| Dimension | **Track 1: Google AI PSS Award** | **Track 2: NSF SaTC / GCP Infrastructure** |
+| :--- | :--- | :--- |
+| **Core Problem** | Autonomous agents leaking credentials into prompt context windows, vector memories, and scratchpads. | Lateral privilege escalation and broken authority chains across hybrid campus-cloud networks. |
+| **Primary Technology** | `stash-exec` subshell envelope + Shannon entropy stream redactor. | Kerberos-to-OIDC bridge daemon + Cloud HA VPN + GKE Workload Identity. |
+| **Funding Target** | **$100,000** unrestricted corporate research gift. | **$600K–$1.2M** federal NSF grant + **$5,000.00** GCP cloud credits. |
+| **Proposal Length** | Short (2–3 page narrative + 1-page budget). | Full federal dossier (15-page project description + data management plan). |
+| **Review Window** | Fast turnaround (annual/semi-annual Google Research cycles). | Formal 6–9 month federal peer-review panel cycle. |
+| **Institutional Route** | Corporate research gift routing with ~6% university fee via Stefan Reiss (RDO). | Full OGC sponsored project routing requiring PI eligibility waiver or Co-PI partner. |
+| **Implementation Complexity** | **Low to Moderate:** Standalone Go binary, OpenClaw plugin hook, and benchmark evaluation suite. | **High:** Complex infrastructure orchestration (IPsec VPN, Kerberos KDC, Kubernetes cluster). |
 
-```sh
-docs/
-├── architecture/           # High-level design (Materialization, Nostr, FOKS)
-├── guides/                 # How-to guides (Local Stewardship, Deployment, Demos)
-├── paper/                  # Formal LaTeX White Paper
-├── slides/                 # Presentation materials (Consolidate ec/ and bsides-cos/)
-├── DEVELOPMENT.md          # Contributor guide
-└── README.md               # Documentation Index
-```
+---
 
-## Usage
+## 3. Core Principles Shared Across Both Tracks
 
-To import a multiline secret into an env var from `pass` database:
+Both tracks adhere to the **Zero-Agent-Read Principle**:
 
-```sh
-export GOOGLE_APPLICATION_CREDENTIALS=(pass show gcp-gcs-pso-f9322c73b9bf.json| string split0)
-```
+1. **Storage at Rest:** All credentials remain encrypted in POSIX keyrings (`pass` / GPG). The agent never possesses direct decryption privileges.
+2. **Ephemeral Materialization:** Authority is conferred strictly at the moment of execution in volatile process memory, never persisted to disk or passed via CLI flags.
+3. **Continuous Auditing:** Token exchanges and process invocations emit cryptographically signed, non-repudiable audit records.
+
+---
+
+## 4. Historical Archive (`v1-legacy`)
+
+The [archive/v1-legacy](file:///home/franklin/Documents/research/stash-house/docs/archive/v1-legacy) directory preserves foundational assets from the 2025 project inception:
+
+- `abstract.md` & `stash.md`: Initial local credential hygiene guides for human developers.
+- `keyringer.md`: Keyringer repository reference.
+- `stash.drawio`: Original visual architecture diagram.
+- `stash.txt`: Strategic analysis formulating the V2 agentic pivot and Google grant evaluation.
+- `stash1.txt`: Deployment and web publishing runbook for `bitsmasher.net`.

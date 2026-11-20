@@ -1,13 +1,7 @@
-# Demonstration
+# Examples
 
-Note that there are some illustrative videos in `./static/video` in this repo.
+## 01 Shell
 
-## 00 Setup
+## 02 Container
 
-* In this step we run the setup tool to prepare the local environment.
-
-## 01 Locate
-
-## 02 Secure
-
-## 03 Safe Use
+## 03 AWS CLI

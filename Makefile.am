@@ -1,48 +1,23 @@
-#include target.mk
+# SPDX-FileCopyrightText: 2021-2026 Franklin Diaz <franklin@bitsmasher.net>
+#
+# SPDX-License-Identifier: MIT
 
-check: DOCKER-exists
-PYTHON-exists: ; @which python > /dev/null
-mytarget: check
-.PHONY: check PYTHON-exists
+ACLOCAL_AMFLAGS = -I config/m4 -I aclocal/latex-m4
+
+.PHONY: check check-env lint clean dist-clean
+
+check:
+	@echo "Checking Stash House dependencies..."
+	@which pass > /dev/null || echo "Warning: 'pass' command not found in PATH"
+	@which gpg > /dev/null || echo "Warning: 'gpg' command not found in PATH"
+
+lint:
+	@npx -y markdownlint-cli "**/*.md" -c .markdownlint.json
 
 clean:
-if HAS_DOCKER
-	docker system prune -f
-endif
-	rm -rf *.egg-info
-	find . -name '*.pyc' | xargs rm -rf
-	find . -name '__pycache__' | xargs rm -rf
-	for trash in README AUTHORS ChangeLog aclocal.m4 autom4te.cache config config.log; \
-	do \
-		if [ -f $$trash ] || [ -d $$trash ]; then \
-			echo "Removing $$trash" ;\
-			rm -rf $$trash ;\
-		fi ; \
-	done
+	rm -rf *.egg-info __pycache__ .pytest_cache
+	find . -name '*.pyc' -delete
+	find . -name '__pycache__' -delete
 
 dist-clean: clean
 	rm -rf _build
-
-latex:
-	mkdir -p ~/texmf/tex/latex
-	tlmgr init-usertree
-	tlmgr install pgf
-	tlmgr install lipsum
-	
-lint:
-	shfmt -i 2 -l -w demo/00_setup/gpg-tool.sh
-	shfmt -i 2 -l -w demo/00_setup/install-client.sh
-	shfmt -i 2 -l -w demo/01_locate/scan_local.sh
-	
-	pushd "${PWD}/docs/slides" &&  latexmk -c && popd
-	pushd "${PWD}/docs/slides" &&  lacheck stash.tex && popd
-
-.PHONY: slides
-slides: 
-	pushd "${PWD}/docs/slides-bsides-cos" && latexmk -pdf -bibtex -f -file-line-error -interaction=nonstopmode -synctex=1 -shell-escape stash.tex && popd
-	pushd "${PWD}/docs/slides-ec" && latexmk -pdf -bibtex -f -file-line-error -interaction=nonstopmode -synctex=1 -shell-escape stash.tex && \
-	latexmk -pdf -bibtex -f -file-line-error -interaction=nonstopmode -synctex=1 -shell-escape slides2.tex && popd 
-
-.PHONY: paper
-paper: 
-	pushd "${PWD}/docs/paper" && latexmk -pdf -bibtex -f -interaction=nonstopmode -shell-escape stash.tex && popd
