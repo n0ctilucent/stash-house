@@ -1,5 +1,8 @@
 # High-Level Design (HLD) — Project Stash House V2
+<<<<<<< HEAD
 
+=======
+>>>>>>> b7617a2 (major overhaul)
 ## Zero-Trust Runtime Credential Containment & The Materialization Boundary for Autonomous Agents
 
 - **Project:** Stash House V2 (`stash-exec`)
@@ -15,7 +18,11 @@
 
 ## 1. Executive Summary
 
+<<<<<<< HEAD
 Autonomous agentic systems (e.g., OpenClaw, AutoGPT, Claude Code) represent a paradigm shift in software development and systems orchestration. Agents autonomously decompose user instructions, invoke command-line utilities, author scratchpad scripts, inspect cloud topologies, and execute multi-hop infrastructure modifications.
+=======
+Autonomous agentic systems (e.g., OpenClaw, AutoGPT, Claude Code) represent a paradigm shift in software development and systems orchestration. Agents autonomously decompose user instructions, invoke command-line utilities, author scratchpad scripts, inspect cloud topologies, and execute multi-hop infrastructure modifications. 
+>>>>>>> b7617a2 (major overhaul)
 
 However, current secret management architectures (HashiCorp Vault, OpenBao, 1Password, cloud IAM) are explicitly designed for **human engineers** operating interactive shells or **static microservices** bound to persistent container identities. None of these systems model or mitigate the primary failure mode of autonomous coding agents: **the inadvertent exfiltration of runtime secrets into conversational memory, vector embeddings, reflection loops, and persistent disk traces.**
 
@@ -27,7 +34,11 @@ However, current secret management architectures (HashiCorp Vault, OpenBao, 1Pas
 
 In an environment where an autonomous agent operates directly on an engineering workstation (e.g., `chonk.lab.bitsmasher.net`), static key placement (e.g., `.env`, exported environment variables, static configuration files) introduces four severe attack surfaces:
 
+<<<<<<< HEAD
 ```text
+=======
+```
+>>>>>>> b7617a2 (major overhaul)
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                          Agentic Exposure Vectors                           │
 ├───────────────────────────────┬─────────────────────────────────────────────┤
@@ -50,7 +61,10 @@ In an environment where an autonomous agent operates directly on an engineering 
 ```
 
 ### Core Invariant
+<<<<<<< HEAD
 
+=======
+>>>>>>> b7617a2 (major overhaul)
 > **The Zero-Agent-Read Principle:** The autonomous agent must never possess the authority to read, display, or inspect plaintext credentials. Authority must be conferred exclusively at the instant of child process execution, restricted to volatile memory, and scrubbed from all return streams.
 
 ---
@@ -100,24 +114,35 @@ flowchart TD
 ```
 
 ### Layer 1: Encrypted Storage at Rest (The Enclave)
+<<<<<<< HEAD
 
+=======
+>>>>>>> b7617a2 (major overhaul)
 - **POSIX Primitive Baseline:** Utilizes standard POSIX and Open Source cryptography: UNIX `pass` (`~/.password-store/`) and GnuPG keyrings.
 - **Zero Agent Visibility:** File permissions enforce that the agent execution user has no direct decrypt access to master keys without explicit broker mediation.
 - **No Static Files:** Forbids plaintext `.env`, `credentials.json`, or exported credentials in user dotfiles.
 
 ### Layer 2: The Ephemeral Execution Envelope (`stash-exec`)
+<<<<<<< HEAD
 
 `stash-exec` serves as the broker materializing authority dynamically:
 
+=======
+`stash-exec` serves as the broker materializing authority dynamically:
+>>>>>>> b7617a2 (major overhaul)
 1. **Subshell Memory Materialization:** Decrypts secrets strictly into volatile heap memory. Uses `execve` to spawn target child processes with injected environment variables.
 2. **Zero Command-Line Leaking:** Prevents exposing secrets via CLI arguments (`--token=XYZ`), ensuring credentials never appear in `ps aux` or procfs tables.
 3. **Short-Lived Downscoping:** Where supported (e.g., AWS STS, Google Cloud Service Account impersonation), `stash-exec` exchanges long-term credentials for short-lived tokens (TTL $\le$ 15 minutes) prior to injection.
 4. **Shell History Bypassing:** Spawns directly or executes with `set +o history`, guaranteeing zero leakage to `.bash_history`.
 
 ### Layer 3: Context Scrubbing Membrane (Stream Sanitization)
+<<<<<<< HEAD
 
 The fatal vulnerability of LLM workflows is capturing tool outputs that embed sensitive keys in traces or errors.
 
+=======
+The fatal vulnerability of LLM workflows is capturing tool outputs that embed sensitive keys in traces or errors.
+>>>>>>> b7617a2 (major overhaul)
 - **Stream Interception:** `stash-exec` attaches pseudoterminal (pty) or pipe listeners to child `stdout` and `stderr`.
 - **Hybrid Redaction Engine:**
   - *Pattern Matching:* High-confidence regex matching for known secret structures (`AKIA[0-9A-Z]{16}`, GitHub tokens `ghp_`, `gho_`, JWT patterns, PEM blocks).
@@ -125,7 +150,10 @@ The fatal vulnerability of LLM workflows is capturing tool outputs that embed se
 - **Safe Replacement:** Replaces discovered sensitive sequences with `[REDACTED_SECRET]` before output is returned to the agent's observation window.
 
 ### Layer 4: Workspace Isolation & Scratchpad Invariants
+<<<<<<< HEAD
 
+=======
+>>>>>>> b7617a2 (major overhaul)
 - **Deny Persistence Linters:** Workspace integrity hooks abort any agent task attempting to write files matching `*.key`, `*credentials*`, or `.env*` to active scratch directories.
 - **Deterministic Teardown:** All child invocations enforce POSIX `trap` cleanup routines, guaranteeing that temporary FIFOs or memory mounts are unlinked on exit.
 
@@ -145,7 +173,10 @@ The reframed Stash House architecture directly addresses the core objective of t
 | **Open Source Value** | **Production-Ready Open Source Tooling:** Releasing `stash-exec` as a standalone binary and OpenClaw plugin under permissive licensing. |
 
 ### Core Research Questions (RQs)
+<<<<<<< HEAD
 
+=======
+>>>>>>> b7617a2 (major overhaul)
 1. **RQ1 (Leakage Modeling):** What is the baseline empirical distribution of credential leakage across popular agent toolsets (bash, file manipulation, cloud CLI) during unconstrained problem-solving?
 2. **RQ2 (Membrane Performance):** What are the optimal trade-offs between detection precision/recall and stream latency when running real-time entropy analysis on high-throughput terminal streams?
 3. **RQ3 (Downscoped Resilience):** How do multi-hop autonomous planning loops recover when ephemeral credentials expire mid-task, and can autonomous token refresh occur without exposing the master broker?
@@ -162,7 +193,10 @@ flowchart LR
 ```
 
 ### Deliverables
+<<<<<<< HEAD
 
+=======
+>>>>>>> b7617a2 (major overhaul)
 1. **`stash-exec` CLI:** Standalone binary compatible with POSIX Linux and macOS.
 2. **Agentic Redaction Membrane:** Standalone Go/Python library for real-time terminal stream secret scrubbing.
 3. **Benchmark Trace Suite:** Synthetic and captured evaluation dataset measuring secret leakage rates across agentic workflows.
